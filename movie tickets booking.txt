@@ -1,0 +1,64 @@
+# 🎬 Simple Movie Ticket Booking System
+
+class Movie:
+    def __init__(self, name, seats):
+        self.name = name
+        self.seats = seats
+
+    def book_seats(self, qty):
+        if qty > 0 and qty <= self.seats:
+            self.seats -= qty
+            return True
+        else:
+            return False
+
+def show_movies(movies):
+    print("\n📽️ Available Movies:")
+    for idx, movie in enumerate(movies, 1):
+        print(f"{idx}. {movie.name} (Seats left: {movie.seats})")
+
+def print_receipt(movie_name, seats_booked, seats_left):
+    print("\n===== 🎟️ Booking Receipt =====")
+    print(f"Movie: {movie_name}")
+    print(f"Tickets Booked: {seats_booked}")
+    print(f"Remaining Seats: {seats_left}")
+    print("==============================\n")
+
+def main():
+    movies = [
+        Movie("Inception", 10),
+        Movie("Interstellar", 8),
+        Movie("The Dark Knight", 5)
+    ]
+
+    while True:
+        # Stop if all movies sold out
+        if all(movie.seats == 0 for movie in movies):
+            print("❌ All movies are sold out. Thank you for visiting!")
+            break
+
+        show_movies(movies)
+        choice = input("🎬 Select a movie by number (or 'q' to quit): ")
+
+        if choice.lower() == 'q':
+            print("🙏 Thank you for using the Movie Ticket Booking System!")
+            break
+
+        try:
+            movie_idx = int(choice) - 1
+            if 0 <= movie_idx < len(movies):
+                movie = movies[movie_idx]
+                seats = int(input(f"🎟️ How many tickets for '{movie.name}'? "))
+
+                if movie.book_seats(seats):
+                    print(f"\n✅ Successfully booked {seats} ticket(s) for {movie.name}!")
+                    print_receipt(movie.name, seats, movie.seats)
+                else:
+                    print(f"❌ Booking failed. Available seats: {movie.seats}")
+            else:
+                print("⚠️ Invalid selection. Please try again.")
+        except ValueError:
+            print("⚠️ Please enter a valid number.")
+
+if __name__ == "__main__":
+    main()
